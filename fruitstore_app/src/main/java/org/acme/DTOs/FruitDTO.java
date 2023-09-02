@@ -1,3 +1,5 @@
+package org.acme.DTOs;
+
 public class FruitDTO
 {
     private String name;

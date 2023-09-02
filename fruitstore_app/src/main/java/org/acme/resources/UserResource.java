@@ -1,3 +1,5 @@
+package org.acme.resources;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,16 +11,17 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
-import org.acme.entities.Fruit;
+import org.acme.DTOs.UserDTO;
+import org.acme.entities.User;
 import org.jboss.logging.Logger;
 
 import java.util.List;
 @ApplicationScoped
-@Path("fruits")
+@Path("users")
 @Produces("application/json")
 @Consumes("application/json")
 
-public class FruitResource
+public class UserResource
 {
 
     private static final Logger LOGGER = Logger.getLogger(FruitResource.class.getName());
@@ -27,45 +30,57 @@ public class FruitResource
     EntityManager entityManager;
 
     @GET
-    public List<Fruit> get() {
-        return entityManager.createNamedQuery("Fruits.findAll", Fruit.class)
+    public List<User> getUsers() {
+        return entityManager.createNamedQuery("Users.findAll", User.class)
                 .getResultList();
     }
 
+
     @GET
     @Path("{id}")
-    public Fruit getSingle(Integer id) {
-        Fruit entity = entityManager.find(Fruit.class, id);
+    public User getSingle(Integer id) {
+        User entity = entityManager.find(User.class, id);
         if (entity == null) {
-            throw new WebApplicationException("org.acme.entities.Fruit with id of " + id + " does not exist.", 404);
+            throw new WebApplicationException("org.acme.entities.User with id of " + id + " does not exist.", 404);
         }
         return entity;
     }
 
     @POST
     @Transactional
-    public Response create(FruitDTO fruit) {
-        Fruit fruitEntity = new Fruit(fruit.getName());
+    public Response createUser(UserDTO user) {
+        User userEntity = new User(user.getName(),user.getAge(), user.getEmail());
 
-        entityManager.persist(fruitEntity);
-        return Response.ok(fruit).status(201).build();
+        entityManager.persist(userEntity);
+        return Response.ok(user).status(201).build();
     }
+
+
+
 
     @PUT
     @Path("{id}")
     @Transactional
-    public Fruit update(Integer id, Fruit fruit) {
-        if (fruit.getName() == null) {
+    public User update(Integer id, User user) {
+        if (user.getName() == null) {
             throw new WebApplicationException("org.acme.entities.Fruit Name was not set on request.", 422);
         }
+        if (user.getAge() == 0) {
+            throw new WebApplicationException("org.acme.entities.Fruit Age was not set on request.", 422);
+        }
+        if (user.getEmail() == null) {
+            throw new WebApplicationException("org.acme.entities.Fruit Email was not set on request.", 422);
+        }
 
-        Fruit entity = entityManager.find(Fruit.class, id);
+        User entity = entityManager.find(User.class, id);
 
         if (entity == null) {
             throw new WebApplicationException("org.acme.entities.Fruit with id of " + id + " does not exist.", 404);
         }
 
-        entity.setName(fruit.getName());
+        entity.setName(user.getName());
+        entity.setAge(user.getAge());
+        entity.setEmail(user.getEmail());
 
         return entity;
     }
@@ -74,9 +89,9 @@ public class FruitResource
     @Path("{id}")
     @Transactional
     public Response delete(Integer id) {
-        Fruit entity = entityManager.getReference(Fruit.class, id);
+        User entity = entityManager.getReference(User.class, id);
         if (entity == null) {
-            throw new WebApplicationException("org.acme.entities.Fruit with id of " + id + " does not exist.", 404);
+            throw new WebApplicationException("org.acme.entities.User with id of " + id + " does not exist.", 404);
         }
         entityManager.remove(entity);
         return Response.status(204).build();
@@ -112,3 +127,5 @@ public class FruitResource
 
     }
 }
+
+

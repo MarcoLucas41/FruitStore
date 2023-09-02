@@ -11,7 +11,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@NamedQuery(name = "Fruits.findAll", query = "SELECT f FROM org.acme.entities.Fruit f ORDER BY f.name", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
+@NamedQuery(name = "Users.findAll", query = "SELECT f FROM org.acme.entities.User f ORDER BY f.name", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
 
 public class User
 {
@@ -21,7 +21,8 @@ public class User
     private String name;
     private int age;
     private String email;
-    public User(String name,int age,String email)
+
+    public User(String name, int age, String email)
     {
         this.name = name;
         this.age = age;
@@ -46,6 +47,21 @@ public class User
     public String getEmail()
     {
         return email;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
     }
 
 
