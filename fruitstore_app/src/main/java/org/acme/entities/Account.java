@@ -1,38 +1,38 @@
 package org.acme.entities;
 
-import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.QueryHint;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 
 @Entity
-@NamedQuery(name = "Users.findAll", query = "SELECT f FROM org.acme.entities.User f ORDER BY f.name", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
+@NamedQuery(name = "Accounts.findAll", query = "SELECT f FROM org.acme.entities.Account f ORDER BY f.name", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
 
-public class User
+public class Account
 {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
+    @Column(length = 40, unique = true)
     private String name;
-    private int age;
+    @Column
+    private Integer age;
+    @Column(length = 40, unique = true)
     private String email;
 
-    public User(String name, int age, String email)
+    public Account(String name, int age, String email)
     {
         this.name = name;
         this.age = age;
         this.email = email;
     }
 
-    public int getId()
+    public Account()
     {
-        return id;
     }
+
 
     public String getName()
     {

@@ -11,17 +11,17 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
-import org.acme.DTOs.UserDTO;
-import org.acme.entities.User;
+import org.acme.DTOs.AccountDTO;
+import org.acme.entities.Account;
 import org.jboss.logging.Logger;
 
 import java.util.List;
 @ApplicationScoped
-@Path("users")
+@Path("accounts")
 @Produces("application/json")
 @Consumes("application/json")
 
-public class UserResource
+public class AccountResource
 {
 
     private static final Logger LOGGER = Logger.getLogger(FruitResource.class.getName());
@@ -30,16 +30,16 @@ public class UserResource
     EntityManager entityManager;
 
     @GET
-    public List<User> getUsers() {
-        return entityManager.createNamedQuery("Users.findAll", User.class)
+    public List<Account> getUsers() {
+        return entityManager.createNamedQuery("Accounts.findAll", Account.class)
                 .getResultList();
     }
 
 
     @GET
     @Path("{id}")
-    public User getSingle(Integer id) {
-        User entity = entityManager.find(User.class, id);
+    public Account getSingle(Integer id) {
+        Account entity = entityManager.find(Account.class, id);
         if (entity == null) {
             throw new WebApplicationException("org.acme.entities.User with id of " + id + " does not exist.", 404);
         }
@@ -48,10 +48,10 @@ public class UserResource
 
     @POST
     @Transactional
-    public Response createUser(UserDTO user) {
-        User userEntity = new User(user.getName(),user.getAge(), user.getEmail());
+    public Response createUser(AccountDTO user) {
+        Account accountEntity = new Account(user.getName(),user.getAge(), user.getEmail());
 
-        entityManager.persist(userEntity);
+        entityManager.persist(accountEntity);
         return Response.ok(user).status(201).build();
     }
 
@@ -61,26 +61,26 @@ public class UserResource
     @PUT
     @Path("{id}")
     @Transactional
-    public User update(Integer id, User user) {
-        if (user.getName() == null) {
+    public Account update(Integer id, Account account) {
+        if (account.getName() == null) {
             throw new WebApplicationException("org.acme.entities.Fruit Name was not set on request.", 422);
         }
-        if (user.getAge() == 0) {
+        if (account.getAge() == 0) {
             throw new WebApplicationException("org.acme.entities.Fruit Age was not set on request.", 422);
         }
-        if (user.getEmail() == null) {
+        if (account.getEmail() == null) {
             throw new WebApplicationException("org.acme.entities.Fruit Email was not set on request.", 422);
         }
 
-        User entity = entityManager.find(User.class, id);
+        Account entity = entityManager.find(Account.class, id);
 
         if (entity == null) {
             throw new WebApplicationException("org.acme.entities.Fruit with id of " + id + " does not exist.", 404);
         }
 
-        entity.setName(user.getName());
-        entity.setAge(user.getAge());
-        entity.setEmail(user.getEmail());
+        entity.setName(account.getName());
+        entity.setAge(account.getAge());
+        entity.setEmail(account.getEmail());
 
         return entity;
     }
@@ -89,7 +89,7 @@ public class UserResource
     @Path("{id}")
     @Transactional
     public Response delete(Integer id) {
-        User entity = entityManager.getReference(User.class, id);
+        Account entity = entityManager.getReference(Account.class, id);
         if (entity == null) {
             throw new WebApplicationException("org.acme.entities.User with id of " + id + " does not exist.", 404);
         }

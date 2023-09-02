@@ -1,12 +1,12 @@
 package org.acme.DTOs;
 
-public class UserDTO
+public class AccountDTO
 {
     private String name;
     private int age;
     private String email;
 
-    public UserDTO(String name,int age,String email)
+    public AccountDTO(String name, int age, String email)
     {
         this.name = name;
         this.age = age;

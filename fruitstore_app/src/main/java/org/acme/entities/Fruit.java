@@ -29,6 +29,10 @@ public class Fruit {
         this.name = name;
     }
 
+    public Fruit()
+    {
+    }
+
     public Integer getId() {
         return id;
     }
